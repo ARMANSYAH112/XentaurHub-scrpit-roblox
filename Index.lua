@@ -311,7 +311,7 @@ do
 	hint.Size = UDim2.new(1, -40, 0, 18)
 	hint.Position = UDim2.new(0, 20, 0, 156)
 	hint.BackgroundTransparency = 1
-	hint.Text = "Hint: Key = ArmansyahOfc"
+	hint.Text = "Hint: Key = is dc"
 	hint.TextColor3 = neon
 	hint.TextSize = 14
 	hint.Font = Enum.Font.Gotham
@@ -328,7 +328,7 @@ do
 	end)
 
 	btnSubmit.MouseButton1Click:Connect(function()
-		if string.lower(keyBox.Text or "") == "armansyahofc" then
+		if string.lower(keyBox.Text or "") == "Armansyahofc" then
 			STATE.KeyAccepted = true
 			notify("Key diterima!")
 			tween(keyFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {Size = UDim2.fromOffset(420, 0), BackgroundTransparency = 1}):Play()
