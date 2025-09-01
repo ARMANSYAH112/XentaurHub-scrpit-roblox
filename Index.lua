@@ -115,7 +115,7 @@ do
 	logoBtn.BackgroundColor3 = dark
 	logoBtn.AutoButtonColor = true
 	logoBtn.BorderSizePixel = 0
-	logoBtn.Image = "https://freeimage.host/i/KfhrL5g" -- << ganti dengan logo kamu
+	logoBtn.Image = "rbxassetid://121494566459633" -- << ganti dengan logo kamu
 	logoBtn.ImageTransparency = 0
 	logoBtn.Parent = screen
 	makeDraggable(logoBtn, logoBtn)
