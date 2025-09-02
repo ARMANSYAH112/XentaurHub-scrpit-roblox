@@ -320,21 +320,13 @@ logoBtn.MouseButton1Click:Connect(function()
 end)
 
 btnSubmit.MouseButton1Click:Connect(function()
-	-- cek key
-	if string.lower(keyBox.Text or "") == "armansyahofc" then
-		STATE.KeyAccepted = true
-		notify("Key diterima!")
-		tween(keyFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {
-			Size = UDim2.fromOffset(420, 0),
-			BackgroundTransparency = 1
-		}):Play()
-		task.delay(0.3, function()
-			keyFrame.Visible = false
-			main.Visible = true
-		end)
-	else
-		notify("Key salah.", 2)
-	end
+    local t = keyBox.Text or ""
+    print("Key dimasukkan:", t)
+    if string.lower(t) == "armansyahofc" then
+        -- diterima...
+    else
+        print("Key salah:", t)
+    end
 end)
 
 btnGet.MouseButton1Click:Connect(function()
