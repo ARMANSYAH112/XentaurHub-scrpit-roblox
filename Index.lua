@@ -250,104 +250,103 @@ do
 	UI.RowAim, UI.TogAim = makeToggleRow("AimBot (lock kamera)", false)
 
 	-- Key Gate UI
-	local keyFrame = Instance.new("Frame")
-	keyFrame.Name = "KeyGate"
-	keyFrame.Size = UDim2.fromOffset(420, 220)
-	keyFrame.Position = UDim2.new(0.5, -210, 0.5, -110)
-	keyFrame.BackgroundColor3 = Color3.fromRGB(12, 12, 22)
-	keyFrame.Parent = screen
-	local kgc = Instance.new("UICorner", keyFrame); kgc.CornerRadius = UDim.new(0, 18)
-	local kgs = Instance.new("UIStroke", keyFrame); kgs.Color = neon2; kgs.Thickness = 2
+local keyFrame = Instance.new("Frame")
+keyFrame.Name = "KeyGate"
+keyFrame.Size = UDim2.fromOffset(420, 220)
+keyFrame.Position = UDim2.new(0.5, -210, 0.5, -110)
+keyFrame.BackgroundColor3 = Color3.fromRGB(12, 12, 22)
+keyFrame.Parent = screen
+local kgc = Instance.new("UICorner", keyFrame); kgc.CornerRadius = UDim.new(0, 18)
+local kgs = Instance.new("UIStroke", keyFrame); kgs.Color = neon2; kgs.Thickness = 2
 
-	local ktitle = Instance.new("TextLabel")
-	ktitle.Size = UDim2.new(1, 0, 0, 38)
-	ktitle.Position = UDim2.new(0, 0, 0, 10)
-	ktitle.BackgroundTransparency = 1
-	ktitle.Text = "Xentaur Hub - Key System"
-	ktitle.TextColor3 = Color3.fromRGB(230, 255, 255)
-	ktitle.TextSize = 20
-	ktitle.Font = Enum.Font.GothamBold
-	ktitle.Parent = keyFrame
+local ktitle = Instance.new("TextLabel")
+ktitle.Size = UDim2.new(1, 0, 0, 38)
+ktitle.Position = UDim2.new(0, 0, 0, 10)
+ktitle.BackgroundTransparency = 1
+ktitle.Text = "Xentaur Hub - Key System"
+ktitle.TextColor3 = Color3.fromRGB(230, 255, 255)
+ktitle.TextSize = 20
+ktitle.Font = Enum.Font.GothamBold
+ktitle.Parent = keyFrame
 
-	local keyBox = Instance.new("TextBox")
-	keyBox.Size = UDim2.new(1, -40, 0, 36)
-	keyBox.Position = UDim2.new(0, 20, 0, 64)
-	keyBox.PlaceholderText = "Masukkan Key di sini"
-	keyBox.ClearTextOnFocus = false
-	keyBox.Text = ""
-	keyBox.BackgroundColor3 = Color3.fromRGB(20, 20, 34)
-	keyBox.TextColor3 = Color3.fromRGB(255, 255, 255)
-	keyBox.Font = Enum.Font.Gotham
-	keyBox.TextSize = 16
-	keyBox.Parent = keyFrame
-	local kbc = Instance.new("UICorner", keyBox); kbc.CornerRadius = UDim.new(0, 10)
-	local kbs = Instance.new("UIStroke", keyBox); kbs.Color = neon; kbs.Thickness = 1
+local keyBox = Instance.new("TextBox")
+keyBox.Size = UDim2.new(1, -40, 0, 36)
+keyBox.Position = UDim2.new(0, 20, 0, 64)
+keyBox.PlaceholderText = "Masukkan Key di sini"
+keyBox.ClearTextOnFocus = false
+keyBox.Text = ""
+keyBox.BackgroundColor3 = Color3.fromRGB(20, 20, 34)
+keyBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+keyBox.Font = Enum.Font.Gotham
+keyBox.TextSize = 16
+keyBox.Parent = keyFrame
+local kbc = Instance.new("UICorner", keyBox); kbc.CornerRadius = UDim.new(0, 10)
+local kbs = Instance.new("UIStroke", keyBox); kbs.Color = neon; kbs.Thickness = 1
 
-	local btnSubmit = Instance.new("TextButton")
-	btnSubmit.Size = UDim2.new(0.48, -10, 0, 34)
-	btnSubmit.Position = UDim2.new(0, 20, 0, 114)
-	btnSubmit.Text = "Masukkan Key"
-	btnSubmit.BackgroundColor3 = Color3.fromRGB(30, 30, 44)
-	btnSubmit.TextColor3 = Color3.fromRGB(200, 255, 255)
-	btnSubmit.Font = Enum.Font.GothamBold
-	btnSubmit.TextSize = 16
-	btnSubmit.Parent = keyFrame
-	local bsc = Instance.new("UICorner", btnSubmit); bsc.CornerRadius = UDim.new(0, 10)
-	local bss = Instance.new("UIStroke", btnSubmit); bss.Color = neon; bss.Thickness = 1
+local btnSubmit = Instance.new("TextButton")
+btnSubmit.Size = UDim2.new(0.48, -10, 0, 34)
+btnSubmit.Position = UDim2.new(0, 20, 0, 114)
+btnSubmit.Text = "Masukkan Key"
+btnSubmit.BackgroundColor3 = Color3.fromRGB(30, 30, 44)
+btnSubmit.TextColor3 = Color3.fromRGB(200, 255, 255)
+btnSubmit.Font = Enum.Font.GothamBold
+btnSubmit.TextSize = 16
+btnSubmit.Parent = keyFrame
+local bsc = Instance.new("UICorner", btnSubmit); bsc.CornerRadius = UDim.new(0, 10)
+local bss = Instance.new("UIStroke", btnSubmit); bss.Color = neon; bss.Thickness = 1
 
-	local btnGet = Instance.new("TextButton")
-	btnGet.Size = UDim2.new(0.48, -10, 0, 34)
-	btnGet.Position = UDim2.new(0.52, 0, 0, 114)
-	btnGet.Text = "Get Key"
-	btnGet.BackgroundColor3 = Color3.fromRGB(30, 30, 44)
-	btnGet.TextColor3 = Color3.fromRGB(200, 255, 255)
-	btnGet.Font = Enum.Font.GothamBold
-	btnGet.TextSize = 16
-	btnGet.Parent = keyFrame
-	local bgc = Instance.new("UICorner", btnGet); bgc.CornerRadius = UDim.new(0, 10)
-	local bgs = Instance.new("UIStroke", btnGet); bgs.Color = neon; bgs.Thickness = 1
+local btnGet = Instance.new("TextButton")
+btnGet.Size = UDim2.new(0.48, -10, 0, 34)
+btnGet.Position = UDim2.new(0.52, 0, 0, 114)
+btnGet.Text = "Get Key"
+btnGet.BackgroundColor3 = Color3.fromRGB(30, 30, 44)
+btnGet.TextColor3 = Color3.fromRGB(200, 255, 255)
+btnGet.Font = Enum.Font.GothamBold
+btnGet.TextSize = 16
+btnGet.Parent = keyFrame
+local bgc = Instance.new("UICorner", btnGet); bgc.CornerRadius = UDim.new(0, 10)
+local bgs = Instance.new("UIStroke", btnGet); bgs.Color = neon; bgs.Thickness = 1
 
-	local hint = Instance.new("TextLabel")
-	hint.Size = UDim2.new(1, -40, 0, 18)
-	hint.Position = UDim2.new(0, 20, 0, 156)
-	hint.BackgroundTransparency = 1
-	hint.Text = "Hint: Key = is dc"
-	hint.TextColor3 = neon
-	hint.TextSize = 14
-	hint.Font = Enum.Font.Gotham
-	hint.Parent = keyFrame
+-- ❌ hint key dihapus biar gak ketahuan orang
 
-	-- Behaviors
-	main.Visible = false
+-- Behaviors
+main.Visible = false
 
-	local minimized = false
-	logoBtn.MouseButton1Click:Connect(function()
-		minimized = not minimized
-		main.Visible = not minimized and STATE.KeyAccepted
-		notify(minimized and "UI disembunyikan" or "UI ditampilkan")
-	end)
+local minimized = false
+logoBtn.MouseButton1Click:Connect(function()
+	minimized = not minimized
+	main.Visible = not minimized and STATE.KeyAccepted
+	notify(minimized and "UI disembunyikan" or "UI ditampilkan")
+end)
 
-	btnSubmit.MouseButton1Click:Connect(function()
-		if string.lower(keyBox.Text or "") == "Armansyahofc" then
-			STATE.KeyAccepted = true
-			notify("Key diterima!")
-			tween(keyFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {Size = UDim2.fromOffset(420, 0), BackgroundTransparency = 1}):Play()
-			task.delay(0.3, function() keyFrame.Visible = false main.Visible = true end)
-		else
-			notify("Key salah.", 2)
-		end
-	end)
+btnSubmit.MouseButton1Click:Connect(function()
+	-- cek key
+	if string.lower(keyBox.Text or "") == "armansyahofc" then
+		STATE.KeyAccepted = true
+		notify("Key diterima!")
+		tween(keyFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {
+			Size = UDim2.fromOffset(420, 0),
+			BackgroundTransparency = 1
+		}):Play()
+		task.delay(0.3, function()
+			keyFrame.Visible = false
+			main.Visible = true
+		end)
+	else
+		notify("Key salah.", 2)
+	end
+end)
 
-	btnGet.MouseButton1Click:Connect(function()
-		-- arahkan user (customize link)
-		local link = "https://discord.gg/Es74bMNS" -- ganti sesuai kebutuhan
-		if setclipboard then pcall(setclipboard, link) end
-		notify("Link Get Key disalin ke clipboard.")
-	end)
+btnGet.MouseButton1Click:Connect(function()
+	-- arahkan user (customize link)
+	local link = "https://discord.gg/Es74bMNS"
+	if setclipboard then pcall(setclipboard, link) end
+	notify("Link Get Key disalin ke clipboard.")
+end)
 
-	UI.Main = main
-	UI.KeyFrame = keyFrame
-	UI.Logo = logoBtn
+UI.Main = main
+UI.KeyFrame = keyFrame
+UI.Logo = logoBtn
 end
 
 --// ====== FEATURES ======
