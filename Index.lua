@@ -398,278 +398,7 @@ local bodyVel, bodyGyro
 
 --// Fly Logic
 local function StartFly()
-    if flying then return end
-    flying = true
 
-    bodyVel = Instance.new("BodyVelocity")
-    bodyVel.MaxForce = Vector3.new(9e9, 9e9, 9e9)
-    bodyVel.Velocity = Vector3.new()
-    bodyVel.Parent = hrp
-
-    bodyGyro = Instance.new("BodyGyro")
-    bodyGyro.MaxTorque = Vector3.new(9e9, 9e9, 9e9)
-    bodyGyro.CFrame = hrp.CFrame
-    bodyGyro.Parent = hrp
-
-    RunService.RenderStepped:Connect(function()
-        if flying and hrp then
-            local camCF = workspace.CurrentCamera.CFrame
-            local moveDir = Vector3.new()
-
-            if UserInputService:IsKeyDown(Enum.KeyCode.W) then
-                moveDir = moveDir + camCF.LookVector
-            end
-            if UserInputService:IsKeyDown(Enum.KeyCode.S) then
-                moveDir = moveDir - camCF.LookVector
-            end
-            if UserInputService:IsKeyDown(Enum.KeyCode.A) then
-                moveDir = moveDir - camCF.RightVector
-            end
-            if UserInputService:IsKeyDown(Enum.KeyCode.D) then
-                moveDir = moveDir + camCF.RightVector
-            end
-            if UserInputService:IsKeyDown(Enum.KeyCode.Space) then
-                moveDir = moveDir + Vector3.new(0,1,0)
-            end
-            if UserInputService:IsKeyDown(Enum.KeyCode.LeftControl) then
-                moveDir = moveDir - Vector3.new(0,1,0)
-            end
-
-            bodyVel.Velocity = moveDir.Unit * flySpeed
-            bodyGyro.CFrame = camCF
-        end
-    end)
-end
-
-local function StopFly()
-    flying = false
-    if bodyVel then bodyVel:Destroy() end
-    if bodyGyro then bodyGyro:Destroy() end
-end
-
---// UI
-local ScreenGui = Instance.new("ScreenGui", player.PlayerGui)
-ScreenGui.Name = "FlyUI"
-
-local Frame = Instance.new("Frame", ScreenGui)
-Frame.Size = UDim2.new(0, 250, 0, 160)
-Frame.Position = UDim2.new(0.05, 0, 0.3, 0)
-Frame.BackgroundColor3 = Color3.fromRGB(20,20,20)
-Frame.BorderSizePixel = 0
-
--- Neon effect
-local UIStroke = Instance.new("UIStroke", Frame)
-UIStroke.Thickness = 2
-UIStroke.Color = Color3.fromRGB(0,255,255)
-UIStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-
-local UICorner = Instance.new("UICorner", Frame)
-UICorner.CornerRadius = UDim.new(0,12)
-
-local Title = Instance.new("TextLabel", Frame)
-Title.Size = UDim2.new(1,0,0,30)
-Title.BackgroundTransparency = 1
-Title.Text = "✈️ Fly Controller"
-Title.TextColor3 = Color3.fromRGB(0,255,255)
-Title.Font = Enum.Font.GothamBold
-Title.TextSize = 18
-
-local ToggleBtn = Instance.new("TextButton", Frame)
-ToggleBtn.Size = UDim2.new(0.45,0,0,40)
-ToggleBtn.Position = UDim2.new(0.05,0,0.3,0)
-ToggleBtn.Text = "Fly: OFF"
-ToggleBtn.BackgroundColor3 = Color3.fromRGB(30,30,30)
-ToggleBtn.TextColor3 = Color3.fromRGB(0,255,255)
-ToggleBtn.Font = Enum.Font.GothamBold
-ToggleBtn.TextSize = 16
-Instance.new("UICorner", ToggleBtn)
-
-local SpeedBox = Instance.new("TextBox", Frame)
-SpeedBox.Size = UDim2.new(0.45,0,0,40)
-SpeedBox.Position = UDim2.new(0.5,0,0.3,0)
-SpeedBox.Text = tostring(flySpeed)
-SpeedBox.BackgroundColor3 = Color3.fromRGB(30,30,30)
-SpeedBox.TextColor3 = Color3.fromRGB(0,255,255)
-SpeedBox.PlaceholderText = "Speed"
-SpeedBox.Font = Enum.Font.GothamBold
-SpeedBox.TextSize = 16
-Instance.new("UICorner", SpeedBox)
-
-local Credit = Instance.new("TextLabel", Frame)
-Credit.Size = UDim2.new(1,0,0,30)
-Credit.Position = UDim2.new(0,0,0.75,0)
-Credit.BackgroundTransparency = 1
-Credit.Text = "© ArmansyahOfc"
-Credit.TextColor3 = Color3.fromRGB(0,255,255)
-Credit.Font = Enum.Font.Gotham
-Credit.TextSize = 14
-
---// Functions
-ToggleBtn.MouseButton1Click:Connect(function()
-    if flying then
-        StopFly()
-        ToggleBtn.Text = "Fly: OFF"
-    else
-        StartFly()
-        ToggleBtn.Text = "Fly: ON"
-    end
-end)
-
-SpeedBox.FocusLost:Connect(function(enterPressed)
-    local val = tonumber(SpeedBox.Text)
-    if val then
-        flySpeed = val
-    else
-        SpeedBox.Text = tostring(flySpeed)
-    end
-end)	UI.TogNoclip.TextColor3 = STATE.Noclip and Color3.fromRGB(120,255,120) or Color3.fromRGB(255,120,120)  
-	setNoclip(STATE.Noclip)  
-	notify("Noclip: "..(STATE.Noclip and "ON" or "OFF"))  
-end)
-
-end
-
---// Fly (BodyVelocity + BodyGyro)
-do
---//disini code fly
---// Neon Fly UI by ArmansyahOfc
-local Players = game:GetService("Players")
-local UserInputService = game:GetService("UserInputService")
-local RunService = game:GetService("RunService")
-local player = Players.LocalPlayer
-local hrp = player.Character:WaitForChild("HumanoidRootPart")
-
-local flying = false
-local flySpeed = 50
-local bodyVel, bodyGyro
-
---// Fly Logic
-local function StartFly()
-    if flying then return end
-    flying = true
-
-    bodyVel = Instance.new("BodyVelocity")
-    bodyVel.MaxForce = Vector3.new(9e9, 9e9, 9e9)
-    bodyVel.Velocity = Vector3.new()
-    bodyVel.Parent = hrp
-
-    bodyGyro = Instance.new("BodyGyro")
-    bodyGyro.MaxTorque = Vector3.new(9e9, 9e9, 9e9)
-    bodyGyro.CFrame = hrp.CFrame
-    bodyGyro.Parent = hrp
-
-    RunService.RenderStepped:Connect(function()
-        if flying and hrp then
-            local camCF = workspace.CurrentCamera.CFrame
-            local moveDir = Vector3.new()
-
-            if UserInputService:IsKeyDown(Enum.KeyCode.W) then
-                moveDir = moveDir + camCF.LookVector
-            end
-            if UserInputService:IsKeyDown(Enum.KeyCode.S) then
-                moveDir = moveDir - camCF.LookVector
-            end
-            if UserInputService:IsKeyDown(Enum.KeyCode.A) then
-                moveDir = moveDir - camCF.RightVector
-            end
-            if UserInputService:IsKeyDown(Enum.KeyCode.D) then
-                moveDir = moveDir + camCF.RightVector
-            end
-            if UserInputService:IsKeyDown(Enum.KeyCode.Space) then
-                moveDir = moveDir + Vector3.new(0,1,0)
-            end
-            if UserInputService:IsKeyDown(Enum.KeyCode.LeftControl) then
-                moveDir = moveDir - Vector3.new(0,1,0)
-            end
-
-            bodyVel.Velocity = moveDir.Unit * flySpeed
-            bodyGyro.CFrame = camCF
-        end
-    end)
-end
-
-local function StopFly()
-    flying = false
-    if bodyVel then bodyVel:Destroy() end
-    if bodyGyro then bodyGyro:Destroy() end
-end
-
---// UI
-local ScreenGui = Instance.new("ScreenGui", player.PlayerGui)
-ScreenGui.Name = "FlyUI"
-
-local Frame = Instance.new("Frame", ScreenGui)
-Frame.Size = UDim2.new(0, 250, 0, 160)
-Frame.Position = UDim2.new(0.05, 0, 0.3, 0)
-Frame.BackgroundColor3 = Color3.fromRGB(20,20,20)
-Frame.BorderSizePixel = 0
-
--- Neon effect
-local UIStroke = Instance.new("UIStroke", Frame)
-UIStroke.Thickness = 2
-UIStroke.Color = Color3.fromRGB(0,255,255)
-UIStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-
-local UICorner = Instance.new("UICorner", Frame)
-UICorner.CornerRadius = UDim.new(0,12)
-
-local Title = Instance.new("TextLabel", Frame)
-Title.Size = UDim2.new(1,0,0,30)
-Title.BackgroundTransparency = 1
-Title.Text = "✈️ Fly Controller"
-Title.TextColor3 = Color3.fromRGB(0,255,255)
-Title.Font = Enum.Font.GothamBold
-Title.TextSize = 18
-
-local ToggleBtn = Instance.new("TextButton", Frame)
-ToggleBtn.Size = UDim2.new(0.45,0,0,40)
-ToggleBtn.Position = UDim2.new(0.05,0,0.3,0)
-ToggleBtn.Text = "Fly: OFF"
-ToggleBtn.BackgroundColor3 = Color3.fromRGB(30,30,30)
-ToggleBtn.TextColor3 = Color3.fromRGB(0,255,255)
-ToggleBtn.Font = Enum.Font.GothamBold
-ToggleBtn.TextSize = 16
-Instance.new("UICorner", ToggleBtn)
-
-local SpeedBox = Instance.new("TextBox", Frame)
-SpeedBox.Size = UDim2.new(0.45,0,0,40)
-SpeedBox.Position = UDim2.new(0.5,0,0.3,0)
-SpeedBox.Text = tostring(flySpeed)
-SpeedBox.BackgroundColor3 = Color3.fromRGB(30,30,30)
-SpeedBox.TextColor3 = Color3.fromRGB(0,255,255)
-SpeedBox.PlaceholderText = "Speed"
-SpeedBox.Font = Enum.Font.GothamBold
-SpeedBox.TextSize = 16
-Instance.new("UICorner", SpeedBox)
-
-local Credit = Instance.new("TextLabel", Frame)
-Credit.Size = UDim2.new(1,0,0,30)
-Credit.Position = UDim2.new(0,0,0.75,0)
-Credit.BackgroundTransparency = 1
-Credit.Text = "© ArmansyahOfc"
-Credit.TextColor3 = Color3.fromRGB(0,255,255)
-Credit.Font = Enum.Font.Gotham
-Credit.TextSize = 14
-
---// Functions
-ToggleBtn.MouseButton1Click:Connect(function()
-    if flying then
-        StopFly()
-        ToggleBtn.Text = "Fly: OFF"
-    else
-        StartFly()
-        ToggleBtn.Text = "Fly: ON"
-    end
-end)
-
-SpeedBox.FocusLost:Connect(function(enterPressed)
-    local val = tonumber(SpeedBox.Text)
-    if val then
-        flySpeed = val
-    else
-        SpeedBox.Text = tostring(flySpeed)
-    end
-end)
 
 --// Speedhack (WalkSpeed)
 do
@@ -699,6 +428,97 @@ end
 
 --// ESP Player (Neon)
 do
+ --// Fly.lua - XperiaHub Module
+--// By ArmansyahOfc
+
+local Players = game:GetService("Players")
+local UserInputService = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
+
+local Fly = {}
+local player = Players.LocalPlayer
+local hrp = player.Character:WaitForChild("HumanoidRootPart")
+
+local flying = false
+local flySpeed = 50
+local bodyVel, bodyGyro
+local connection
+
+-- Mulai terbang
+function Fly.Start()
+    if flying then return end
+    flying = true
+
+    bodyVel = Instance.new("BodyVelocity")
+    bodyVel.MaxForce = Vector3.new(9e9, 9e9, 9e9)
+    bodyVel.Velocity = Vector3.new()
+    bodyVel.Parent = hrp
+
+    bodyGyro = Instance.new("BodyGyro")
+    bodyGyro.MaxTorque = Vector3.new(9e9, 9e9, 9e9)
+    bodyGyro.CFrame = hrp.CFrame
+    bodyGyro.Parent = hrp
+
+    connection = RunService.RenderStepped:Connect(function()
+        if flying and hrp then
+            local camCF = workspace.CurrentCamera.CFrame
+            local moveDir = Vector3.new()
+
+            if UserInputService:IsKeyDown(Enum.KeyCode.W) then
+                moveDir = moveDir + camCF.LookVector
+            end
+            if UserInputService:IsKeyDown(Enum.KeyCode.S) then
+                moveDir = moveDir - camCF.LookVector
+            end
+            if UserInputService:IsKeyDown(Enum.KeyCode.A) then
+                moveDir = moveDir - camCF.RightVector
+            end
+            if UserInputService:IsKeyDown(Enum.KeyCode.D) then
+                moveDir = moveDir + camCF.RightVector
+            end
+            if UserInputService:IsKeyDown(Enum.KeyCode.Space) then
+                moveDir = moveDir + Vector3.new(0,1,0)
+            end
+            if UserInputService:IsKeyDown(Enum.KeyCode.LeftControl) then
+                moveDir = moveDir - Vector3.new(0,1,0)
+            end
+
+            if moveDir.Magnitude > 0 then
+                bodyVel.Velocity = moveDir.Unit * flySpeed
+            else
+                bodyVel.Velocity = Vector3.new()
+            end
+
+            bodyGyro.CFrame = camCF
+        end
+    end)
+end
+
+-- Stop terbang
+function Fly.Stop()
+    flying = false
+    if bodyVel then bodyVel:Destroy() bodyVel = nil end
+    if bodyGyro then bodyGyro:Destroy() bodyGyro = nil end
+    if connection then connection:Disconnect() connection = nil end
+end
+
+-- Toggle Fly (biar bisa dipanggil langsung juga)
+function Fly.Toggle()
+    if flying then
+        Fly.Stop()
+    else
+        Fly.Start()
+    end
+end
+
+-- Atur kecepatan
+function Fly.SetSpeed(speed)
+    if type(speed) == "number" then
+        flySpeed = speed
+    end
+end
+
+return Fly
 --//disini code esp
 local espHighlights = {}
 
