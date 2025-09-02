@@ -321,11 +321,13 @@ end)
 
 btnSubmit.MouseButton1Click:Connect(function()
     local t = keyBox.Text or ""
-    print("Key dimasukkan:", t)
     if string.lower(t) == "armansyahofc" then
-        -- diterima...
+        STATE.KeyAccepted = true
+        keyFrame.Visible = false
+        UI.Main.Visible = true
+        notify("✅ Key benar, selamat datang!")
     else
-        print("Key salah:", t)
+        notify("❌ Key salah, coba lagi!")
     end
 end)
 
