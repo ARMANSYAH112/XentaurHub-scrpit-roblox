@@ -281,6 +281,72 @@ AddScriptTab:CreateButton({
 	end
 })
 
+local HttpService = game:GetService("HttpService")
+local DataStoreService = game:GetService("DataStoreService")
+local ScriptStore = DataStoreService:GetDataStore("PublicScripts_v1")
+
+-- Konfigurasi
+local REFRESH_INTERVAL = 30 -- Auto refresh setiap 30 detik
+local SavedScripts = {}
+local Username = game.Players.LocalPlayer.Name
+
+-- Load Scripts dari DataStore
+function LoadScriptsFromCloud()
+	local success, data = pcall(function()
+		return ScriptStore:GetAsync("AllScripts")
+	end)
+	
+	if success and data then
+		SavedScripts = HttpService:JSONDecode(data)
+		RefreshAllScriptsTab()
+		Luna:Notification({
+			Title = "Loaded!",
+			Content = "Scripts berhasil dimuat dari cloud!",
+			Image = "cloud_download",
+			Time = 2
+		})
+	else
+		SavedScripts = {}
+		Luna:Notification({
+			Title = "Info",
+			Content = "Belum ada script di cloud",
+			Image = "info",
+			Time = 2
+		})
+	end
+end
+
+-- Save Scripts ke DataStore
+function SaveScriptsToCloud()
+	local success, err = pcall(function()
+		local jsonData = HttpService:JSONEncode(SavedScripts)
+		ScriptStore:SetAsync("AllScripts", jsonData)
+	end)
+	
+	if success then
+		Luna:Notification({
+			Title = "Saved!",
+			Content = "Scripts berhasil disimpan ke cloud!",
+			Image = "cloud_upload",
+			Time = 2
+		})
+	else
+		Luna:Notification({
+			Title = "Error!",
+			Content = "Gagal menyimpan ke cloud: " .. tostring(err),
+			Image = "error",
+			Time = 5
+		})
+	end
+end
+
+-- Auto Refresh
+spawn(function()
+	while wait(REFRESH_INTERVAL) do
+		LoadScriptsFromCloud()
+	end
+end)
+
 -- Tab All Scripts
 local AllScriptsTab = Window:CreateTab({
 	Name = "All Script",
@@ -289,9 +355,19 @@ local AllScriptsTab = Window:CreateTab({
 	ShowTitle = true
 })
 
+-- Button untuk Manual Refresh
+AllScriptsTab:CreateButton({
+	Name = "🔄 Refresh Scripts",
+	Description = "Muat ulang scripts dari cloud",
+	Callback = function()
+		LoadScriptsFromCloud()
+	end
+})
+
 local ScriptElements = {}
 
 function RefreshAllScriptsTab()
+	-- Hapus semua element kecuali button refresh
 	for _, element in pairs(ScriptElements) do
 		if element and element.Destroy then
 			pcall(function() element:Destroy() end)
@@ -301,7 +377,7 @@ function RefreshAllScriptsTab()
 	
 	if #SavedScripts == 0 then
 		local emptyLabel = AllScriptsTab:CreateLabel({
-			Text = "Belum ada script tersimpan",
+			Text = "Belum ada script tersimpan. Klik 'Refresh Scripts' untuk memuat.",
 			Style = 2
 		})
 		table.insert(ScriptElements, emptyLabel)
@@ -309,7 +385,7 @@ function RefreshAllScriptsTab()
 		for i, script in ipairs(SavedScripts) do
 			local scriptBtn = AllScriptsTab:CreateButton({
 				Name = script.Name,
-				Description = "By: " .. script.By,
+				Description = "By: " .. script.By .. " | " .. os.date("%d/%m/%Y", script.Timestamp or 0),
 				Callback = function()
 					ShowScriptDetail(i, script)
 				end
@@ -345,44 +421,14 @@ function ShowScriptDetail(index, script)
 		Style = 2
 	})
 	
-	DetailTab:CreateButton({
-		Name = "Preview Script",
-		Description = "Lihat script dalam tab baru",
-		Callback = function()
-			local PreviewTab = Window:CreateTab({
-				Name = "Preview: " .. script.Name,
-				Icon = "code",
-				ImageSource = "Material",
-				ShowTitle = true
-			})
-			
-			PreviewTab:CreateButton({
-				Name = "Kembali",
-				Description = "Tutup preview",
-				Callback = function()
-					pcall(function() PreviewTab:Destroy() end)
-				end
-			})
-			
-			PreviewTab:CreateParagraph({
-				Title = "Script Code:",
-				Text = script.Code
-			})
-			
-			PreviewTab:CreateButton({
-				Name = "Copy Script",
-				Description = "Copy ke clipboard",
-				Callback = function()
-					setclipboard(script.Code)
-					Luna:Notification({
-						Title = "Copied!",
-						Content = "Script berhasil di copy!",
-						Image = "content_copy",
-						Time = 2
-					})
-				end
-			})
-		end
+	DetailTab:CreateLabel({
+		Text = "Published: " .. os.date("%d/%m/%Y %H:%M", script.Timestamp or 0),
+		Style = 2
+	})
+	
+	DetailTab:CreateLabel({
+		Text = "Script: " .. script.Code,
+		Style = 1
 	})
 	
 	DetailTab:CreateButton({
@@ -416,7 +462,7 @@ function ShowScriptDetail(index, script)
 			else
 				Luna:Notification({
 					Title = "Error!",
-					Content = "Gagal menjalankan script!",
+					Content = "Gagal menjalankan script: " .. tostring(err),
 					Image = "error",
 					Time = 5
 				})
@@ -424,14 +470,14 @@ function ShowScriptDetail(index, script)
 		end
 	})
 	
-	-- Tombol Delete HANYA untuk username "knobaeyyyy"
-	if Username == "knobaeyyyy" then
+	-- Tombol Delete untuk admin atau pemilik script
+	if Username == "knobaeyyyy" or Username == script.By then
 		DetailTab:CreateButton({
 			Name = "Delete",
-			Description = "Hapus script ini (Admin Only)",
+			Description = Username == "knobaeyyyy" and "Hapus script ini (Admin)" or "Hapus script kamu",
 			Callback = function()
 				table.remove(SavedScripts, index)
-				SaveScripts()
+				SaveScriptsToCloud()
 				
 				Luna:Notification({
 					Title = "Deleted!",
@@ -446,7 +492,85 @@ function ShowScriptDetail(index, script)
 	end
 end
 
-RefreshAllScriptsTab()
+-- Tab Publish Script
+local PublishTab = Window:CreateTab({
+	Name = "Publish Script",
+	Icon = "publish",
+	ImageSource = "Material",
+	ShowTitle = true
+})
+
+local TempScript = {
+	Name = "",
+	Code = ""
+}
+
+PublishTab:CreateParagraph({
+	Title = "Info",
+	Text = "Publish script kamu agar bisa digunakan oleh player lain!"
+})
+
+PublishTab:CreateInput({
+	Name = "Script Name",
+	PlaceholderText = "Masukkan nama script...",
+	RemoveTextAfterFocusLost = false,
+	Callback = function(Text)
+		TempScript.Name = Text
+	end
+})
+
+PublishTab:CreateInput({
+	Name = "Script Code",
+	PlaceholderText = "Paste script code disini...",
+	RemoveTextAfterFocusLost = false,
+	Callback = function(Text)
+		TempScript.Code = Text
+	end
+})
+
+PublishTab:CreateButton({
+	Name = "📤 Publish Script",
+	Description = "Upload script ke cloud",
+	Callback = function()
+		if TempScript.Name == "" or TempScript.Code == "" then
+			Luna:Notification({
+				Title = "Error!",
+				Content = "Nama dan code script tidak boleh kosong!",
+				Image = "error",
+				Time = 3
+			})
+			return
+		end
+		
+		local newScript = {
+			Name = TempScript.Name,
+			By = Username,
+			Code = TempScript.Code,
+			Timestamp = os.time()
+		}
+		
+		table.insert(SavedScripts, 1, newScript) -- Tambah di awal array
+		SaveScriptsToCloud()
+		
+		Luna:Notification({
+			Title = "Published!",
+			Content = "Script '" .. TempScript.Name .. "' berhasil dipublish!",
+			Image = "check_circle",
+			Time = 3
+		})
+		
+		-- Reset form
+		TempScript.Name = ""
+		TempScript.Code = ""
+		
+		-- Refresh tab
+		wait(1)
+		LoadScriptsFromCloud()
+	end
+})
+
+-- Load scripts saat pertama kali
+LoadScriptsFromCloud()
 
 -- Tab Example
 local Tab = Window:CreateTab({
